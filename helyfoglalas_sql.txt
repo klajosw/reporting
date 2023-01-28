@@ -1,0 +1,75 @@
+coev_id     acco_id     tipus Part_id   Nev                                         MT_ID      pacg_id     telsz
+16580772574	16579887567	153	173259384 	Kecskeméti Lajos                     		312266698	12049947461	36302400037
+7381674014 	7318724450 	153	7318671614	Magyar Telekom Nyrt.-Kecskeméti Lajos		375643102	12049947461	36304118218
+186066430  	186066427  	153	173259384 	Kecskeméti Lajos                     		312266698	12049947461	36304757070
+
+----
+--üres hely
+
+SELECT 
+
+   a.tablespace_name, 
+
+   a.file_name, 
+
+   a.bytes allocated_bytes, 
+
+   b.free_bytes,
+
+   round(b.free_bytes/a.bytes,2) free_ratio
+
+   
+
+FROM 
+
+   dba_data_files a, 
+
+   (SELECT file_id, SUM(bytes) free_bytes
+
+    FROM dba_free_space b GROUP BY file_id) b
+
+WHERE 1=1
+
+and   a.file_id=b.file_id
+
+and   a.tablespace_name='UF_DATA2'
+
+ 
+
+--userek
+
+select   USERNAME,
+
+  CREATED,
+
+  PROFILE,
+
+  DEFAULT_TABLESPACE,
+
+  TEMPORARY_TABLESPACE
+
+from   dba_users
+
+order   by USERNAME
+
+ 
+
+--foglalt hely
+
+select  s.tablespace_name
+
+        ,s.owner
+
+       ,round(sum(s.bytes)/1024/1024) megabyte
+
+from dba_segments s
+
+where s.tablespace_name='UF_DATA2'
+
+group by s.tablespace_name
+
+        ,s.owner
+
+
+
+
